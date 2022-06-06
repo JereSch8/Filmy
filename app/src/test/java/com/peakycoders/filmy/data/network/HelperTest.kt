@@ -17,10 +17,4 @@ class HelperTest {
         Assert.assertEquals(Helper.baseURL, helper.getRetrofit().baseUrl().toString())
     }
 
-    @Test
-    fun `baseURL created successful NoPass`() {
-        val helper = Helper
-        Assert.assertEquals("", helper.getRetrofit().baseUrl().toString())
-    }
-    
 }
