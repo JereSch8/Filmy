@@ -33,6 +33,8 @@ class MainActivity : ComponentActivity() {
             Log.e( "GetMovieByTitleUseCase: ", mtitle.toString())
         }
 
+        //ejemplo
+
         setContent {
             FilmyTheme {
                 // A surface container using the 'background' color from the theme
