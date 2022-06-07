@@ -2,6 +2,7 @@ package com.peakycoders.filmy.usecases
 
 import com.peakycoders.filmy.entities.models.Movie
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -12,7 +13,7 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-
+@ExperimentalCoroutinesApi
 class GetMovieByIDUseCaseTest {
     //@RelaxedMockK
     //private lateinit var retrofit: Retrofit
@@ -35,10 +36,10 @@ class GetMovieByIDUseCaseTest {
 
         val movie: Movie? = GetMovieByIDUseCase().invoke(id)
 
-        Assert.assertEquals(true, movie != null)
+        assertEquals(true, movie != null)
 
         if (movie != null) {
-            Assert.assertEquals(id, movie.id)
+            assertEquals(id, movie.id)
         }
     }
     @Test
@@ -47,14 +48,14 @@ class GetMovieByIDUseCaseTest {
 
         val movie: Movie? = GetMovieByIDUseCase().invoke(id)
 
-        Assert.assertEquals(true, movie == null)
+        assertEquals(true, movie == null)
     }
     @Test
     fun FilmSearchNameIsEspected()= runTest {
         val id = 297761.toLong()
         val stringExpected = "Escuadrón suicida"
         val movie: Movie? = GetMovieByIDUseCase().invoke(id)
-        Assert.assertEquals(movie?.title, stringExpected)
+        assertEquals(movie?.title, stringExpected)
     }
 
 }

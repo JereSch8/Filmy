@@ -2,6 +2,7 @@ package com.peakycoders.filmy.usecases
 
 import com.peakycoders.filmy.entities.models.Movie
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -9,7 +10,7 @@ import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-
+@ExperimentalCoroutinesApi
 class GetPopularMovieUseCaseTest{
     @Before
     fun setUp() {
