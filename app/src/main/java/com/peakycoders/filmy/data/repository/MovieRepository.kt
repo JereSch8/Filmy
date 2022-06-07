@@ -31,6 +31,6 @@ class MovieRepository {
         return MovieDataBase.listPopular
     }
 
-    fun getVisited() : List<Movie> = MovieDataBase.listVisited.toList().reversed()
+    fun getVisited() : List<Movie> = MovieDataBase.listVisited.reversed()
     fun setVisited(movie : Movie) = MovieDataBase.listVisited.add(movie)
 }
