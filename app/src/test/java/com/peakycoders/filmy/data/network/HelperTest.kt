@@ -16,4 +16,5 @@ class HelperTest {
         val helper = Helper
         Assert.assertEquals(Helper.baseURL, helper.getRetrofit().baseUrl().toString())
     }
+
 }
