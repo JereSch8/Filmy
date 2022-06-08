@@ -10,6 +10,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.peakycoders.filmy.R
@@ -37,7 +39,7 @@ class HomeActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val moviesPopular = homeViewModel.popularMovies.value
+            val moviesPopular = homeViewModel.popularMovies.value //Returns a list of movies
             val moviesPlayingNow = homeViewModel.nowPlayingMovies.value
             val moviesVisited = homeViewModel.visitedMovies.value
             val isLoading = homeViewModel.isLoading.value
@@ -48,7 +50,8 @@ class HomeActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    if (isLoading) CustomCircularProgressBar()
+                    if (isLoading) CustomCircularProgressBar() //Si isLoading == true, pone en pantalla
+                    //la barra de progreso circular que denota al proceso de carga
                     SimpleListView(
                         movieList = moviesPlayingNow,
                         modifier = Modifier
@@ -75,6 +78,7 @@ class HomeActivity : ComponentActivity() {
 
 
     @Composable
+    @Preview
     private fun CustomCircularProgressBar() {
         Box(
             contentAlignment = Alignment.Center,
@@ -87,8 +91,11 @@ class HomeActivity : ComponentActivity() {
         }
     }
 
-
+    /*
+    * SimpleListView crea una LazyRow con la ventaja de compone solamente los items visibles.
+    */
     @OptIn(ExperimentalMaterial3Api::class)
+    //@Preview
     @Composable
     fun SimpleListView(movieList: List<Movie>, modifier: Modifier) {
         LazyRow(
@@ -104,7 +111,7 @@ class HomeActivity : ComponentActivity() {
                         .clickable {
                             TransferMovie.movie = movie
                             startActivity(Intent(this@HomeActivity, DetailsActivity::class.java))
-                    },
+                        },
                     shape = RoundedCornerShape(20.dp),
                     border = BorderStroke(1.dp, Color.White),
 
