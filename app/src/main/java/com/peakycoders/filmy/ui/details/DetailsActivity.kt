@@ -7,7 +7,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -19,17 +18,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.android.volley.toolbox.ImageRequest
 import com.peakycoders.filmy.R
 import com.peakycoders.filmy.entities.models.Movie
 import com.peakycoders.filmy.ui.home.HomeActivity
@@ -37,6 +31,7 @@ import com.peakycoders.filmy.ui.theme.FilmyTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.font.FontWeight
+import kotlin.math.truncate
 
 
 class DetailsActivity : ComponentActivity() {
@@ -106,12 +101,18 @@ class DetailsActivity : ComponentActivity() {
                             Column() {
                                 Text(text = movie.title, fontWeight = FontWeight.Bold,
                                     textAlign = TextAlign.Left, modifier = Modifier.padding(10.dp))
-                                Text(text = "Fecha de lanzamiento: "+movie.releaseDate, fontWeight = FontWeight.Normal,
-                                    textAlign = TextAlign.Left, modifier = Modifier.padding(10.dp))
-                                Text(text = "Idioma original: "+movie.originalLanguage, fontWeight = FontWeight.Normal,
-                                    textAlign = TextAlign.Left, modifier = Modifier.padding(10.dp))
-                                Text(text = "Popularidad: "+movie.popularity, fontWeight = FontWeight.Normal,
-                                    textAlign = TextAlign.Left, modifier = Modifier.padding(10.dp), fontSize = 15.sp)
+                                if(movie.releaseDate != null){
+                                    Text(text = "Fecha de lanzamiento: "+movie.releaseDate, fontWeight = FontWeight.Normal,
+                                        textAlign = TextAlign.Left, modifier = Modifier.padding(10.dp))
+                                }
+                                if(movie.originalLanguage != null){
+                                    Text(text = "Idioma original: "+movie.originalLanguage, fontWeight = FontWeight.Normal,
+                                        textAlign = TextAlign.Left, modifier = Modifier.padding(10.dp))
+                                }
+                                if(movie.popularity != null){
+                                    Text(text = "Popularidad: "+truncate(movie.popularity/1000), fontWeight = FontWeight.Normal,
+                                        textAlign = TextAlign.Left, modifier = Modifier.padding(10.dp), fontSize = 15.sp)
+                                }
                                 }
                         }
                         Text(text = movie.overview, modifier = Modifier
