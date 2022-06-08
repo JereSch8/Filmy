@@ -25,6 +25,14 @@ class HomeViewModel : ViewModel(), Observer {
          viewModelScope.launch {
             isLoading.value = true
 
+            /*
+            * Se crea una variable para almacenar la lista que surge de getPlayinNowMoviesUseCase() que se obtuvo
+            * anteriormente de GetNowPlayingMoviesUseCase() from usecases.
+            * Se verifica que la lista no esté vacia, y si no está, se guarda en el atributo de la clase
+            * HomeViewModel : nowPlayingMovies, que es una lista que almacena datos de tipo Movie.
+            *
+            */
+
             val moviesNowPlaying = getPlayinNowMovieUseCase()
             if (moviesNowPlaying.isNotEmpty()){
                 nowPlayingMovies.value = moviesNowPlaying
@@ -34,7 +42,7 @@ class HomeViewModel : ViewModel(), Observer {
                 popularMovies.value = moviesPopular
             }
 
-            isLoading.value = false
+            isLoading.value = false //Una vez realizado la carga de las dos listas, ya no 'esta cargando'
         }
     }
 
