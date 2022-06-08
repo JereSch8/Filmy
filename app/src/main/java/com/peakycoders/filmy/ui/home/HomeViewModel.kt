@@ -4,13 +4,14 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.peakycoders.filmy.data.database.VisitedDB
 import com.peakycoders.filmy.entities.models.Movie
+import com.peakycoders.filmy.entities.patterns.Observer
 import com.peakycoders.filmy.usecases.GetNowPlayingMovieUseCase
 import com.peakycoders.filmy.usecases.GetPopularMovieUseCase
-import com.peakycoders.filmy.usecases.GetVisitedMovieUseCase
 import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel : ViewModel(), Observer {
     val popularMovies : MutableState<List<Movie>> = mutableStateOf(listOf())
     val nowPlayingMovies : MutableState<List<Movie>> = mutableStateOf(listOf())
     val visitedMovies : MutableState<List<Movie>> = mutableStateOf(listOf())
@@ -18,10 +19,10 @@ class HomeViewModel : ViewModel() {
 
     private var getPopularMovieUseCase = GetPopularMovieUseCase()
     private var getPlayinNowMovieUseCase = GetNowPlayingMovieUseCase()
-    private var getVisitedMovieUseCase = GetVisitedMovieUseCase()
 
      init {
-        viewModelScope.launch {
+         VisitedDB.attach(this)
+         viewModelScope.launch {
             isLoading.value = true
 
             val moviesNowPlaying = getPlayinNowMovieUseCase()
@@ -33,18 +34,11 @@ class HomeViewModel : ViewModel() {
                 popularMovies.value = moviesPopular
             }
 
-            fakeUpdate() //Esta acá de prueba nada mas
             isLoading.value = false
         }
     }
 
-    //TODO: Agregar feature del observer para actualizar las peliculas visitadas
-    private fun fakeUpdate(){
-        if (popularMovies.value.isNotEmpty()){
-            getVisitedMovieUseCase.save(popularMovies.value[0])
-            getVisitedMovieUseCase.save(popularMovies.value[3])
-            getVisitedMovieUseCase.save(popularMovies.value[1])
-            visitedMovies.value = getVisitedMovieUseCase()
-        }
+    override fun update(notice: List<Movie>) {
+        visitedMovies.value = notice
     }
 }
