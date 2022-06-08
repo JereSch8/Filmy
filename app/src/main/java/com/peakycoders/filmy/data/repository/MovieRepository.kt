@@ -1,6 +1,7 @@
 package com.peakycoders.filmy.data.repository
 
 import com.peakycoders.filmy.data.database.MovieDataBase
+import com.peakycoders.filmy.data.database.VisitedDB
 import com.peakycoders.filmy.data.network.MovieService
 import com.peakycoders.filmy.entities.models.Movie
 
@@ -31,6 +32,6 @@ class MovieRepository {
         return MovieDataBase.listPopular
     }
 
-    fun getVisited() : List<Movie> = MovieDataBase.listVisited.reversed()
-    fun setVisited(movie : Movie) = MovieDataBase.listVisited.add(movie)
+    fun getVisited() : List<Movie> = VisitedDB.listVisited
+    fun setVisited(movie : Movie) = VisitedDB.add(movie)
 }
