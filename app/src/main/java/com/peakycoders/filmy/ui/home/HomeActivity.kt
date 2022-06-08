@@ -99,7 +99,7 @@ fun SimpleListView(movieList : List<Movie>, modifier: Modifier ) {
                         shape = RoundedCornerShape(20.dp)
                     ) {
                         Image(
-                            painterResource(R.drawable.ic_launcher_background),
+                            painterResource(R.mipmap.ic_launcher),
                             contentDescription = "",
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.fillMaxSize()
