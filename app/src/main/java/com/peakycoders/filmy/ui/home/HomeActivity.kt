@@ -3,7 +3,6 @@ package com.peakycoders.filmy.ui.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -13,14 +12,12 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -32,7 +29,7 @@ import com.peakycoders.filmy.entities.TransferMovie
 import com.peakycoders.filmy.entities.models.Movie
 import com.peakycoders.filmy.ui.details.DetailsActivity
 import com.peakycoders.filmy.ui.theme.FilmyTheme
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.filled.Search
 import com.peakycoders.filmy.R
 import com.peakycoders.filmy.ui.utils.fullScreen
 
@@ -165,26 +162,23 @@ class HomeActivity : ComponentActivity() {
 
     @Composable
     fun TopAppBarCompose(){
-        val context = LocalContext.current
-        TopAppBar (
+        SmallTopAppBar(
             title = { Text(
                 text = "Movies",
                 fontSize = 16.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                color = Color(resources.getColor(R.color.filmy_color, theme))
-            )},
+                color = Color(resources.getColor(R.color.filmy_color, theme)))
+                    },
             actions = {
-                IconButton(onClick = {
-                    Toast.makeText(context,"Search", Toast.LENGTH_SHORT).show()
-                    //startActivity(Intent(this@HomeActiity, SearchActivity::class.java))
-                }) {
-                    Icon(Icons.Default.Search, contentDescription = "Search",
-                        tint = Color(resources.getColor(R.color.filmy_color, theme)))
+                IconButton(onClick = { /* doSomething() */ }) {
+                    Icon(
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = "Search button",
+                        tint = Color(resources.getColor(R.color.filmy_color, theme))
+                    )
                 }
-
             },
-            backgroundColor = Color.Black,
-            contentColor = Color.Blue)
+        )
     }
 }
