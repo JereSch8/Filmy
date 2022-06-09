@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
 
         LaunchedEffect(key1 = true){
             startAnimation = true
-            delay(5000)
+            delay(1000)
             startActivity(Intent(this@MainActivity, HomeActivity::class.java))
         }
 
