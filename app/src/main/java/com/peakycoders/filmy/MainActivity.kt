@@ -23,11 +23,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.peakycoders.filmy.ui.home.HomeActivity
 import com.peakycoders.filmy.ui.theme.FilmyTheme
+import com.peakycoders.filmy.ui.utils.fullScreen
 import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        fullScreen()
 
         setContent {
             FilmyTheme {
@@ -52,8 +54,10 @@ class MainActivity : ComponentActivity() {
 
         LaunchedEffect(key1 = true){
             startAnimation = true
-            delay(5000)
-            startActivity(Intent(this@MainActivity, HomeActivity::class.java))
+            delay(1000)
+            val intent = Intent(this@MainActivity, HomeActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
         }
 
         Splash(alpha = alphaAnim.value)
