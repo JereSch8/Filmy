@@ -2,6 +2,7 @@ package com.peakycoders.filmy.ui.details
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -56,7 +57,7 @@ class DetailsActivity : ComponentActivity() {
         }
 
         val movie : Movie = detailsViewModel.movie!! //TODO: Aca tienen la peli para cargar toda al vista
-
+        Log.e( "onCreate: ", "moivie: ${movie}")
 
             setContent {
             FilmyTheme {
@@ -88,7 +89,8 @@ class DetailsActivity : ComponentActivity() {
                             textAlign = TextAlign.Center,
                             style = TextStyle(fontSize = 30.sp))
                         Row(modifier = Modifier
-                            .horizontalScroll(scroll).fillMaxSize()) {
+                            .horizontalScroll(scroll)
+                            .fillMaxSize()) {
                             Image(painter = painterResource(id = R.drawable.johnnytest), contentDescription =
                             "SMALL JOHNNY TEST", modifier = Modifier
                                 .size(120.dp)
@@ -101,18 +103,12 @@ class DetailsActivity : ComponentActivity() {
                             Column() {
                                 Text(text = movie.title, fontWeight = FontWeight.Bold,
                                     textAlign = TextAlign.Left, modifier = Modifier.padding(10.dp))
-                                if(movie.releaseDate != null){
-                                    Text(text = "Fecha de lanzamiento: "+movie.releaseDate, fontWeight = FontWeight.Normal,
-                                        textAlign = TextAlign.Left, modifier = Modifier.padding(10.dp))
-                                }
-                                if(movie.originalLanguage != null){
-                                    Text(text = "Idioma original: "+movie.originalLanguage, fontWeight = FontWeight.Normal,
-                                        textAlign = TextAlign.Left, modifier = Modifier.padding(10.dp))
-                                }
-                                if(movie.popularity != null){
-                                    Text(text = "Popularidad: "+truncate(movie.popularity/1000), fontWeight = FontWeight.Normal,
-                                        textAlign = TextAlign.Left, modifier = Modifier.padding(10.dp), fontSize = 15.sp)
-                                }
+                                Text(text = "Fecha de lanzamiento: "+movie.release_date, fontWeight = FontWeight.Normal,
+                                    textAlign = TextAlign.Left, modifier = Modifier.padding(10.dp))
+                                Text(text = "Idioma original: "+movie.original_language, fontWeight = FontWeight.Normal,
+                                    textAlign = TextAlign.Left, modifier = Modifier.padding(10.dp))
+                                Text(text = "Popularidad: "+truncate(movie.popularity/1000), fontWeight = FontWeight.Normal,
+                                    textAlign = TextAlign.Left, modifier = Modifier.padding(10.dp), fontSize = 15.sp)
                                 }
                         }
                         Text(text = movie.overview, modifier = Modifier
