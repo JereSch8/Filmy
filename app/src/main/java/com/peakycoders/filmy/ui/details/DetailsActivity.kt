@@ -2,7 +2,6 @@ package com.peakycoders.filmy.ui.details
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,18 +9,15 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.peakycoders.filmy.R
@@ -30,15 +26,17 @@ import com.peakycoders.filmy.ui.home.HomeActivity
 import com.peakycoders.filmy.ui.theme.FilmyTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import coil.compose.AsyncImage
+import com.peakycoders.filmy.entities.models.Cast
+import com.peakycoders.filmy.ui.utils.Utils
 import com.peakycoders.filmy.ui.utils.fullScreen
-import kotlin.math.truncate
+import androidx.compose.ui.text.style.TextOverflow
 
 
 class DetailsActivity : ComponentActivity() {
     private val detailsViewModel : DetailsViewModel by viewModels()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,75 +51,150 @@ class DetailsActivity : ComponentActivity() {
             startActivity(Intent(this@DetailsActivity, HomeActivity::class.java))
         }
 
-        val movie : Movie = detailsViewModel.movie!! //TODO: Aca tienen la peli para cargar toda al vista
-        Log.e( "onCreate: ", "moivie: ${movie}")
+        val movie : Movie = detailsViewModel.movie!!
 
             setContent {
+                val casting = detailsViewModel.casting.value
             FilmyTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    display(movie)
+                    Display(movie, casting)
                 }
             }
         }
     }
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun display(movie: Movie){
-        val scroll = rememberScrollState(0)
-        var isExpanded by remember { mutableStateOf(true) }
+    fun Display(movie: Movie, casting: List<Cast>){
+        var isExpanded by remember { mutableStateOf(false) }
         LazyColumn{
             item{
                 Box(modifier = Modifier.fillMaxWidth()){
-                    Column() {
+                    Column {
                         AsyncImage(
-                            model = "https://image.tmdb.org/t/p/original/${movie.backdrop_path}", contentDescription =
-                            "",
+                            model = Utils.genURL_img("${movie.backdrop_path}"),
+                            contentDescription = "",
                             modifier = Modifier
                                 .fillMaxSize()
                                 .background(color = Color.White))
-                        Text(text = movie.title, modifier = Modifier
-                            .padding(20.dp)
-                            .fillMaxWidth()
-                            .background(color = Color.White), color = Color.Black,
+                        Text(text = movie.title,
+                            modifier = Modifier
+                                .padding(20.dp)
+                                .fillMaxWidth(),
                             textAlign = TextAlign.Center,
                             style = TextStyle(fontSize = 30.sp))
                         Row(modifier = Modifier
-                            .horizontalScroll(scroll)
                             .fillMaxSize()) {
-                            AsyncImage(
-                                model = "https://image.tmdb.org/t/p/original/${movie.poster_path}", contentDescription =
-                            "", modifier = Modifier
-                                .size(120.dp)
-                                .clip(CircleShape)
-                                .border(5.dp, Color.White, CircleShape)
-                                .padding(10.dp)
-                                .fillMaxSize()
-                                .background(color = Color.White)
-                                , alignment = Alignment.Center)
-                            Column() {
-                                Text(text = movie.title, fontWeight = FontWeight.Bold,
-                                    textAlign = TextAlign.Left, modifier = Modifier.padding(10.dp))
-                                Text(text = "Fecha de lanzamiento: "+movie.release_date, fontWeight = FontWeight.Normal,
-                                    textAlign = TextAlign.Left, modifier = Modifier.padding(10.dp))
-                                Text(text = "Idioma original: "+ movie.original_language.toUpperCase(), fontWeight = FontWeight.Normal,
-                                    textAlign = TextAlign.Left, modifier = Modifier.padding(10.dp))
-                                Text(text = "Popularidad: "+truncate(movie.popularity/1000), fontWeight = FontWeight.Normal,
-                                    textAlign = TextAlign.Left, modifier = Modifier.padding(10.dp), fontSize = 15.sp)
-                                }
+                            Card(
+                                modifier = Modifier
+                                    .height(200.dp).padding(horizontal = 20.dp),
+                                shape = RoundedCornerShape(20.dp)
+                            ){
+                                AsyncImage(
+                                    model = Utils.genURL_img("${movie.poster_path}"),
+                                    contentDescription = "",
+                                    contentScale = ContentScale.Fit,
+                                    )
+                            }
+                            Column {
+                                Text(
+                                    text = "Fecha de lanzamiento: ${movie.release_date}",
+                                    fontWeight = FontWeight.Normal,
+                                    textAlign = TextAlign.Left,
+                                    modifier = Modifier.padding(5.dp),
+                                    overflow = TextOverflow.Ellipsis,
+                                )
+                                Text(
+                                    text = "Idioma original: ${movie.original_language.uppercase()}",
+                                    fontWeight = FontWeight.Normal,
+                                    textAlign = TextAlign.Left,
+                                    modifier = Modifier.padding(5.dp),
+                                    overflow = TextOverflow.Ellipsis,
+                                )
+                                Text(
+                                    text = "Popularidad: ${movie.vote_average}",
+                                    fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Left,
+                                    modifier = Modifier.padding(5.dp),
+                                    overflow = TextOverflow.Ellipsis,
+                                )
+                                Text(
+                                    text = "Votos: ${movie.vote_count}",
+                                    fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Left,
+                                    modifier = Modifier.padding(5.dp),
+                                    overflow = TextOverflow.Ellipsis,
+                                )
+                            }
                         }
-                        Text(text = movie.overview, modifier = Modifier
-                            .clickable { isExpanded = !isExpanded }
-                            .padding(20.dp)
-                            .offset(y = 0.dp),
+                        Text(
+                            text = movie.overview, modifier = Modifier
+                                .clickable { isExpanded = !isExpanded }
+                                .padding(20.dp)
+                                .offset(y = 0.dp),
                             maxLines = if (isExpanded) Int.MAX_VALUE else 5,
-                            overflow = if (isExpanded) TextOverflow.Visible else TextOverflow.Ellipsis)
-
+                            overflow = if (isExpanded) TextOverflow.Visible else TextOverflow.Ellipsis
+                        )
+                        Casting(casting = casting)
                     }
                 }
             }
+        }
+    }
 
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun Casting(casting: List<Cast>) {
+        LazyRow(
+            contentPadding = PaddingValues(0.dp),
+        ) {
+            items(casting) { cast ->
+                Column(
+                    modifier = Modifier
+                        .height(240.dp)
+                        .width(160.dp)
+                        .padding(5.dp)
+                        .background(color = Color.Transparent)
+                        .clickable {
+                            Toast
+                                .makeText(
+                                    this@DetailsActivity,
+                                    cast.character,
+                                    Toast.LENGTH_SHORT
+                                )
+                                .show()
+                        },
+                    ) {
+                    Column {
+                        Card(
+                            modifier = Modifier
+                                .width(Double.POSITIVE_INFINITY.dp)
+                                .height(200.dp),
+                            shape = RoundedCornerShape(20.dp)
+                        ) {
+                            AsyncImage(
+                                model = Utils.genURL_img(cast.profile_path),
+                                contentDescription = "",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                        Text(
+                            text = cast.original_name,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                textAlign = TextAlign.Center),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(top = 8.dp, start = 1.dp, end = 1.dp)
+                        )
+                    }
+                }
+
+            }
         }
     }
 

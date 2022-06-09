@@ -30,7 +30,10 @@ import com.peakycoders.filmy.entities.models.Movie
 import com.peakycoders.filmy.ui.details.DetailsActivity
 import com.peakycoders.filmy.ui.theme.FilmyTheme
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import com.peakycoders.filmy.R
+import com.peakycoders.filmy.ui.utils.Utils
 import com.peakycoders.filmy.ui.utils.fullScreen
 
 
@@ -81,7 +84,6 @@ class HomeActivity : ComponentActivity() {
                                 }
                                 MoviesVisited(movieList = moviesVisited)
                             }
-
                         }
                     )
                 }
@@ -130,7 +132,7 @@ class HomeActivity : ComponentActivity() {
                             shape = RoundedCornerShape(20.dp)
                         ) {
                             AsyncImage(
-                                model = "https://image.tmdb.org/t/p/original/${movie.poster_path}",
+                                model = Utils.genURL_img(movie.poster_path),
                                 contentDescription = "",
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier.fillMaxSize()
@@ -166,6 +168,7 @@ class HomeActivity : ComponentActivity() {
             title = { Text(
                 text = "Movies",
                 fontSize = 16.sp,
+                style = TextStyle(fontWeight = Bold),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = Color(resources.getColor(R.color.filmy_color, theme)))
