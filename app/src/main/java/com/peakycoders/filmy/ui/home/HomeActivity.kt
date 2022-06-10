@@ -17,10 +17,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.peakycoders.filmy.ui.theme.FilmyTheme
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import com.peakycoders.filmy.R
 import com.peakycoders.filmy.ui.utils.fullScreen
 
+const val hmTestTag = "hmTestTag"
+const val filmTestTag = "filmTestTag"
 
 class HomeActivity : ComponentActivity() {
     private val homeViewModel: HomeViewModel by viewModels()
@@ -45,8 +48,10 @@ class HomeActivity : ComponentActivity() {
                                     .padding(innerPadding)
                                     .verticalScroll(scrollState)
                                     .absolutePadding(bottom = 20.dp)
+                                    .testTag(hmTestTag)
                             ) {
-                                Box(modifier = Modifier.height(20.dp))
+                                Box(modifier = Modifier.height(20.dp)
+                                    .testTag(filmTestTag))
                                 homeViewModel.responseNowPlaying.value.Get()
                                 Subtitle(subtitle = "Populares")
                                 homeViewModel.responsePopular.value.Get()
