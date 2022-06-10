@@ -7,15 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.peakycoders.filmy.data.database.VisitedDB
 import com.peakycoders.filmy.entities.models.Movie
 import com.peakycoders.filmy.entities.patterns.Observer
+import com.peakycoders.filmy.ui.patterns.*
 import com.peakycoders.filmy.usecases.GetNowPlayingMovieUseCase
 import com.peakycoders.filmy.usecases.GetPopularMovieUseCase
 import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel(), Observer {
-    val popularMovies : MutableState<List<Movie>> = mutableStateOf(listOf())
-    val nowPlayingMovies : MutableState<List<Movie>> = mutableStateOf(listOf())
-    val visitedMovies : MutableState<List<Movie>> = mutableStateOf(listOf())
-    val isLoading : MutableState<Boolean> = mutableStateOf(false)
+    val visitedMovies : MutableState<Response> = mutableStateOf(Response(Error("")))
+
+    val responsePopular : MutableState<Response> = mutableStateOf(Response(Loading()))
+    val responseNowPlaying : MutableState<Response> = mutableStateOf(Response(Loading()))
 
     private var getPopularMovieUseCase = GetPopularMovieUseCase()
     private var getPlayinNowMovieUseCase = GetNowPlayingMovieUseCase()
@@ -23,30 +24,39 @@ class HomeViewModel : ViewModel(), Observer {
      init {
          VisitedDB.attach(this)
          viewModelScope.launch {
-            isLoading.value = true
-
-            /*
-            * Se crea una variable para almacenar la lista que surge de getPlayinNowMoviesUseCase() que se obtuvo
-            * anteriormente de GetNowPlayingMoviesUseCase() from usecases.
-            * Se verifica que la lista no esté vacia, y si no está, se guarda en el atributo de la clase
-            * HomeViewModel : nowPlayingMovies, que es una lista que almacena datos de tipo Movie.
-            *
-            */
-
             val moviesNowPlaying = getPlayinNowMovieUseCase()
-            if (moviesNowPlaying.isNotEmpty()){
-                nowPlayingMovies.value = moviesNowPlaying
-            }
-            val moviesPopular = getPopularMovieUseCase(1)
-            if (moviesPopular.isNotEmpty()){
-                popularMovies.value = moviesPopular
-            }
+            if (moviesNowPlaying.isNotEmpty())
+                responseNowPlaying.value = Response(
+                    Success(
+                        SuccessMovie(moviesNowPlaying)
+                    )
+                )
+            else
+                responseNowPlaying.value = Response(
+                    Error("Se produjo un error al obtener las peliculas del momento")
+                )
 
-            isLoading.value = false //Una vez realizado la carga de las dos listas, ya no 'esta cargando'
+            val moviesPopular = getPopularMovieUseCase(1)
+            if (moviesPopular.isNotEmpty())//{
+                responsePopular.value = Response(
+                    Success(
+                        SuccessMovie(moviesPopular)
+                    )
+                )
+            else
+                responsePopular.value = Response(
+                    Error("Se produjo un error al obtener las peliculas populares")
+                )
         }
     }
 
     override fun update(notice: List<Movie>) {
-        visitedMovies.value = notice
+        if (notice.isNotEmpty()){
+            visitedMovies.value = Response(
+                Success(
+                    SuccessMovie(notice)
+                )
+            )
+        }
     }
 }
