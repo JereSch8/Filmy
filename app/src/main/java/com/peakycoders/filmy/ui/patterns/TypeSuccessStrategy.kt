@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -34,7 +36,6 @@ interface TypeSuccess {
 }
 
 class SuccessCast(private val casting: List<Cast>) : TypeSuccess {
-
     @Composable
     override fun Show()  {
         val context = LocalContext.current
@@ -128,6 +129,58 @@ class SuccessMovie(private val movieList: List<Movie>) : TypeSuccess {
                     }
                 }
 
+            }
+        }
+    }
+}
+
+class SuccessSearchMovie(private val movieList: List<Movie>) : TypeSuccess {
+    @Composable
+    override fun Show() {
+        val context = LocalContext.current
+        LazyColumn {
+            items(movieList) { movie ->
+                Row(
+                    modifier = Modifier
+                        .height(240.dp)
+                        .fillMaxWidth()
+                        .padding(5.dp)
+                        .background(color = Color.Transparent)
+                        .clickable {
+                            TransferMovie.movie = movie
+                            context.startActivity(Intent(context, DetailsActivity::class.java))
+                        },
+                ) {
+                    Card(
+                        modifier = Modifier
+                            .width(160.dp)
+                            .height(200.dp),
+                        shape = RoundedCornerShape(20.dp)
+                    ) {
+                        AsyncImage(
+                            model = Utils.genURL_img(movie.poster_path),
+                            contentDescription = "",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                    Column{
+                        Text(
+                            text = movie.title,
+                            style = TextStyle(fontSize = 22.sp, fontWeight = FontWeight.Bold),
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                            modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp)
+                        )
+                        Text(
+                            text = movie.overview,
+                            style = TextStyle(fontSize = 16.sp),
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 5,
+                            modifier = Modifier.padding(top = 12.dp, start = 8.dp, end = 8.dp)
+                        )
+                    }
+                }
             }
         }
     }

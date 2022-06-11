@@ -1,5 +1,6 @@
 package com.peakycoders.filmy.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,13 +18,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.peakycoders.filmy.ui.theme.FilmyTheme
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import com.peakycoders.filmy.R
+import com.peakycoders.filmy.ui.search.SearchActivity
 import com.peakycoders.filmy.ui.utils.fullScreen
 
-const val hmTestTag = "hmTestTag"
-const val filmTestTag = "filmTestTag"
 
 class HomeActivity : ComponentActivity() {
     private val homeViewModel: HomeViewModel by viewModels()
@@ -48,10 +47,8 @@ class HomeActivity : ComponentActivity() {
                                     .padding(innerPadding)
                                     .verticalScroll(scrollState)
                                     .absolutePadding(bottom = 20.dp)
-                                    .testTag(hmTestTag)
                             ) {
-                                Box(modifier = Modifier.height(20.dp)
-                                    .testTag(filmTestTag))
+                                Box(modifier = Modifier.height(20.dp))
                                 homeViewModel.responseNowPlaying.value.Get()
                                 Subtitle(subtitle = "Populares")
                                 homeViewModel.responsePopular.value.Get()
@@ -77,7 +74,9 @@ class HomeActivity : ComponentActivity() {
                 color = Color(resources.getColor(R.color.filmy_color, theme)))
                     },
             actions = {
-                IconButton(onClick = { /* doSomething() */ }) {
+                IconButton(onClick = {
+                    startActivity(
+                        Intent(this@HomeActivity, SearchActivity::class.java))}) {
                     Icon(
                         imageVector = Icons.Filled.Search,
                         contentDescription = "Search button",

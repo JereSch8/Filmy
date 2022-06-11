@@ -16,6 +16,8 @@ class MovieRepository {
 
     suspend fun getByTitle(title : String) : List<Movie> = api.getByTitle( title )
 
+    suspend fun searchMovie(query : String) : List<Movie> = api.searchMovie( query )
+
     suspend fun getNowPlaying() : List<Movie>{
         if(MovieDataBase.listNowPlaying.isEmpty()){
             val response = api.getNowPlaying()
