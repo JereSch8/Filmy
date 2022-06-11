@@ -20,4 +20,7 @@ interface MovieApiClient {
 
     @GET("/3/movie/popular?api_key=${SecretValues.api_key}&language=es-ES")
     suspend fun getPopular(@Query("page") page : Long) :  Response<ResponseModel>
+
+    @GET("/3/search/movie?api_key=${SecretValues.api_key}&language=es-ES")
+    suspend fun searchMovie(@Query("query") query : String) :  Response<ResponseModel>
 }
