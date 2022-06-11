@@ -4,47 +4,59 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.peakycoders.filmy.data.database.VisitedDB
 import com.peakycoders.filmy.entities.models.Movie
+import com.peakycoders.filmy.entities.patterns.Observer
+import com.peakycoders.filmy.ui.patterns.*
 import com.peakycoders.filmy.usecases.GetNowPlayingMovieUseCase
 import com.peakycoders.filmy.usecases.GetPopularMovieUseCase
-import com.peakycoders.filmy.usecases.GetVisitedMovieUseCase
 import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
-    val popularMovies : MutableState<List<Movie>> = mutableStateOf(listOf())
-    val nowPlayingMovies : MutableState<List<Movie>> = mutableStateOf(listOf())
-    val visitedMovies : MutableState<List<Movie>> = mutableStateOf(listOf())
-    val isLoading : MutableState<Boolean> = mutableStateOf(false)
+class HomeViewModel : ViewModel(), Observer {
+    val visitedMovies : MutableState<Response> = mutableStateOf(Response(Error("")))
+
+    val responsePopular : MutableState<Response> = mutableStateOf(Response(Loading()))
+    val responseNowPlaying : MutableState<Response> = mutableStateOf(Response(Loading()))
 
     private var getPopularMovieUseCase = GetPopularMovieUseCase()
     private var getPlayinNowMovieUseCase = GetNowPlayingMovieUseCase()
-    private var getVisitedMovieUseCase = GetVisitedMovieUseCase()
 
      init {
-        viewModelScope.launch {
-            isLoading.value = true
-
+         VisitedDB.attach(this)
+         viewModelScope.launch {
             val moviesNowPlaying = getPlayinNowMovieUseCase()
-            if (moviesNowPlaying.isNotEmpty()){
-                nowPlayingMovies.value = moviesNowPlaying
-            }
-            val moviesPopular = getPopularMovieUseCase(1)
-            if (moviesPopular.isNotEmpty()){
-                popularMovies.value = moviesPopular
-            }
+            if (moviesNowPlaying.isNotEmpty())
+                responseNowPlaying.value = Response(
+                    Success(
+                        SuccessMovie(moviesNowPlaying)
+                    )
+                )
+            else
+                responseNowPlaying.value = Response(
+                    Error("Se produjo un error al obtener las peliculas del momento")
+                )
 
-            fakeUpdate() //Esta acá de prueba nada mas
-            isLoading.value = false
+            val moviesPopular = getPopularMovieUseCase(1)
+            if (moviesPopular.isNotEmpty())//{
+                responsePopular.value = Response(
+                    Success(
+                        SuccessMovie(moviesPopular)
+                    )
+                )
+            else
+                responsePopular.value = Response(
+                    Error("Se produjo un error al obtener las peliculas populares")
+                )
         }
     }
 
-    //TODO: Agregar feature del observer para actualizar las peliculas visitadas
-    private fun fakeUpdate(){
-        if (popularMovies.value.isNotEmpty()){
-            getVisitedMovieUseCase.save(popularMovies.value[0])
-            getVisitedMovieUseCase.save(popularMovies.value[3])
-            getVisitedMovieUseCase.save(popularMovies.value[1])
-            visitedMovies.value = getVisitedMovieUseCase()
+    override fun update(notice: List<Movie>) {
+        if (notice.isNotEmpty()){
+            visitedMovies.value = Response(
+                Success(
+                    SuccessMovie(notice)
+                )
+            )
         }
     }
 }

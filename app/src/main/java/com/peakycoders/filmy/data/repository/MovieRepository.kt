@@ -1,6 +1,7 @@
 package com.peakycoders.filmy.data.repository
 
 import com.peakycoders.filmy.data.database.MovieDataBase
+import com.peakycoders.filmy.data.database.VisitedDB
 import com.peakycoders.filmy.data.network.MovieService
 import com.peakycoders.filmy.entities.models.Movie
 
@@ -14,6 +15,8 @@ class MovieRepository {
     suspend fun getByID(id : Long) : Movie? = api.getByID( id )
 
     suspend fun getByTitle(title : String) : List<Movie> = api.getByTitle( title )
+
+    suspend fun searchMovie(query : String) : List<Movie> = api.searchMovie( query )
 
     suspend fun getNowPlaying() : List<Movie>{
         if(MovieDataBase.listNowPlaying.isEmpty()){
@@ -31,6 +34,6 @@ class MovieRepository {
         return MovieDataBase.listPopular
     }
 
-    fun getVisited() : List<Movie> = MovieDataBase.listVisited.reversed()
-    fun setVisited(movie : Movie) = MovieDataBase.listVisited.add(movie)
+    fun getVisited() : List<Movie> = VisitedDB.listVisited
+    fun setVisited(movie : Movie) = VisitedDB.add(movie)
 }

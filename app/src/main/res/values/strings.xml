@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Filmy</string>
+    <string name="error_movietransfer">\"Se produjo un error con la pelicula seleccionada.\"</string>
 </resources>
