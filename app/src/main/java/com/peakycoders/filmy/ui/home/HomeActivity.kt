@@ -24,8 +24,7 @@ import com.peakycoders.filmy.R
 import com.peakycoders.filmy.ui.search.SearchActivity
 import com.peakycoders.filmy.ui.utils.fullScreen
 
-const val hmTestTag = "hmTestTag"
-
+const val hmTestTag="hmTestTag"
 
 class HomeActivity : ComponentActivity() {
     private val homeViewModel: HomeViewModel by viewModels()
