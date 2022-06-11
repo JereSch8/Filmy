@@ -3,22 +3,16 @@ package com.peakycoders.filmy.usecases
 import com.peakycoders.filmy.entities.models.Movie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Assert.*
 
 import org.junit.After
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 @ExperimentalCoroutinesApi
 class GetMovieByIDUseCaseTest {
-    //@RelaxedMockK
-    //private lateinit var retrofit: Retrofit
-    //private val retrofit = Helper.getRetrofit()
-    //private lateinit var movieService: MovieService
 
     @Before
     fun setUp() {

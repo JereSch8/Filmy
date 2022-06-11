@@ -24,14 +24,12 @@ class GetPopularMovieUseCaseTest{
 
     @Test
     fun GetPopularMoviesIsNotEmpty() = runTest{
-        //uspend operator fun invoke(page : Long) : List<Movie> = repository.getPopular(page)
         val pag = 1.toLong()
         val movie: List<Movie> = GetPopularMovieUseCase().invoke(page= pag)
         assertNotEquals(0, movie.size)
     }
     @Test
     fun GetPopularMoviesSearchingANullPage() = runTest{
-        //uspend operator fun invoke(page : Long) : List<Movie> = repository.getPopular(page)
         val pag = 0.toLong()
         val movie: List<Movie> = GetPopularMovieUseCase().invoke(page= pag)
         assertEquals(0, movie.size)

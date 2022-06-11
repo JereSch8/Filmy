@@ -1,8 +1,6 @@
 package com.peakycoders.filmy.usecases
 
 import com.peakycoders.filmy.entities.models.Movie
-import io.mockk.coEvery
-import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.resetMain
@@ -11,7 +9,6 @@ import kotlinx.coroutines.test.setMain
 import org.junit.Assert.*
 
 import org.junit.After
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 @ExperimentalCoroutinesApi
@@ -30,12 +27,12 @@ class GetMovieByTitleUseCaseTest {
     fun GetCorrectMovieByTitle() = runTest{
         val title = "Escuadrón suicida"
         val movie: List<Movie> = GetMovieByTitleUseCase().invoke(title)
-        assertEquals(movie?.first().title, title)
+        assertEquals(movie.first().title, title)
     }
     @Test
     fun GetAIncorrectMovieByTitle() = runTest{
         val title = "Escuadrón suicida"
         val movie: List<Movie> = GetMovieByTitleUseCase().invoke(title)
-        assertNotEquals(movie?.first().title, "")
+        assertNotEquals(movie.first().title, "")
     }
 }
