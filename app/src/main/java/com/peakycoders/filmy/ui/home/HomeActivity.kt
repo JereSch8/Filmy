@@ -1,5 +1,6 @@
 package com.peakycoders.filmy.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,6 +20,7 @@ import com.peakycoders.filmy.ui.theme.FilmyTheme
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import com.peakycoders.filmy.R
+import com.peakycoders.filmy.ui.search.SearchActivity
 import com.peakycoders.filmy.ui.utils.fullScreen
 
 
@@ -72,7 +74,9 @@ class HomeActivity : ComponentActivity() {
                 color = Color(resources.getColor(R.color.filmy_color, theme)))
                     },
             actions = {
-                IconButton(onClick = { /* doSomething() */ }) {
+                IconButton(onClick = {
+                    startActivity(
+                        Intent(this@HomeActivity, SearchActivity::class.java))}) {
                     Icon(
                         imageVector = Icons.Filled.Search,
                         contentDescription = "Search button",
