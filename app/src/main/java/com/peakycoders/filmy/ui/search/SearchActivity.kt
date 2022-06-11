@@ -2,15 +2,14 @@ package com.peakycoders.filmy.ui.search
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
@@ -32,7 +31,6 @@ class SearchActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.fullScreen()
-        val searchWidgetState by searchViewModel.searchWidgetState
         val searchTextState by searchViewModel.searchTextState
 
         setContent {
@@ -44,7 +42,6 @@ class SearchActivity : ComponentActivity() {
                     Scaffold(
                         topBar = {
                             MainAppBar(
-                                searchWidgetState = searchWidgetState,
                                 searchTextState = searchTextState,
                                 onTextChange = {
                                     searchViewModel.updateSearchTextState(newValue = it)
@@ -55,16 +52,15 @@ class SearchActivity : ComponentActivity() {
                                     )
                                 },
                                 onSearchClicked = {
-                                    Log.e("Searched Text", it)
-                                },
-                                onSearchTriggered = {
-                                    searchViewModel.updateSearchWidgetState(newValue = SearchWidgetState.OPENED)
+                                    searchViewModel.search(it)
                                 }
                              )
                         },
                         content = { innerPadding ->
-                            LazyRow(
-                                modifier = Modifier.padding(innerPadding)){}
+                            Row(
+                                modifier = Modifier.padding(innerPadding)){
+                                searchViewModel.resultSearch.value.Get()
+                            }
                         }
                     )
                   }
@@ -75,20 +71,17 @@ class SearchActivity : ComponentActivity() {
 
 @Composable
 fun MainAppBar(
-    searchWidgetState: SearchWidgetState,
     searchTextState: String,
     onTextChange: (String) -> Unit,
     onCloseClicked: () -> Unit,
     onSearchClicked: (String) -> Unit,
-    onSearchTriggered: () -> Unit
 ) {
-
     SearchAppBar(
                 text = searchTextState,
                 onTextChange = onTextChange,
                 onCloseClicked = onCloseClicked,
                 onSearchClicked = onSearchClicked
-            )
+    )
 }
 
 @Composable
@@ -142,11 +135,19 @@ fun SearchAppBar(
                         }
                     }
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Close Icon",
-                        tint = Color.White
-                    )
+                    if(text.isNotEmpty()){
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Erase Icon",
+                            tint = Color.White
+                        )
+                    }else{
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Return Icon",
+                            tint = Color.White
+                        )
+                    }
                 }
             },
             keyboardOptions = KeyboardOptions(
