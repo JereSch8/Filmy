@@ -1,11 +1,8 @@
 package com.peakycoders.filmy.data.network.usecases
 
-import com.peakycoders.filmy.data.database.MovieDataBase
 import com.peakycoders.filmy.entities.models.Movie
 import com.peakycoders.filmy.usecases.GetMovieByIDUseCase
-import com.peakycoders.filmy.usecases.GetPopularMovieUseCase
 import com.peakycoders.filmy.usecases.GetVisitedMovieUseCase
-import io.mockk.impl.log.Logger.Companion.invoke
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.resetMain

@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -134,6 +135,9 @@ class SuccessMovie(private val movieList: List<Movie>) : TypeSuccess {
     }
 }
 
+const val filmTestTag = "filmTestTag"
+
+
 class SuccessSearchMovie(private val movieList: List<Movie>) : TypeSuccess {
     @Composable
     override fun Show() {
@@ -146,6 +150,10 @@ class SuccessSearchMovie(private val movieList: List<Movie>) : TypeSuccess {
                         .fillMaxWidth()
                         .padding(5.dp)
                         .background(color = Color.Transparent)
+
+                        .testTag(filmTestTag)
+
+
                         .clickable {
                             TransferMovie.movie = movie
                             context.startActivity(Intent(context, DetailsActivity::class.java))
