@@ -134,7 +134,9 @@ class SuccessMovie(private val movieList: List<Movie>) : TypeSuccess {
         }
     }
 }
+
 const val filmTestTag = "filmTestTag"
+
 
 class SuccessSearchMovie(private val movieList: List<Movie>) : TypeSuccess {
     @Composable
@@ -148,7 +150,10 @@ class SuccessSearchMovie(private val movieList: List<Movie>) : TypeSuccess {
                         .fillMaxWidth()
                         .padding(5.dp)
                         .background(color = Color.Transparent)
+
                         .testTag(filmTestTag)
+
+
                         .clickable {
                             TransferMovie.movie = movie
                             context.startActivity(Intent(context, DetailsActivity::class.java))
