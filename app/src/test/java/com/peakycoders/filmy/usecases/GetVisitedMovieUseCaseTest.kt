@@ -6,14 +6,12 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.junit.Assert.*
-
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-@ExperimentalCoroutinesApi
-class GetMovieByIDUseCaseTest {
 
+@ExperimentalCoroutinesApi
+internal class GetVisitedMovieUseCaseTest{
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
@@ -23,33 +21,25 @@ class GetMovieByIDUseCaseTest {
     fun tearDown() {
         Dispatchers.resetMain()
     }
-
     @Test
-    fun CorrectSearchById()= runTest {
+    fun `try save a data in a Repository if it is possible test pass`()= runTest {
         val id = 297761.toLong()
-
         val movie: Movie? = GetMovieByIDUseCase().invoke(id)
-
-        assertEquals(true, movie != null)
-
-        if (movie != null) {
-            assertEquals(id, movie.id)
+        if(movie!=null){
+            GetVisitedMovieUseCase().save(movie)
         }
+        GetVisitedMovieUseCase().invoke()
+        assert(GetVisitedMovieUseCase().invoke().isNotEmpty())
     }
+
     @Test
-    fun InvalidIdSearch()= runTest {
-        val id = -1.toLong()
-
+    fun `try save a data in a Repository if it is possible test fail`()= runTest {
+        val id = 0.toLong()
         val movie: Movie? = GetMovieByIDUseCase().invoke(id)
-
-        assertEquals(true, movie == null)
+        if(movie!=null){
+            GetVisitedMovieUseCase().save(movie)
+        }
+        GetVisitedMovieUseCase().invoke()
+        assert(GetVisitedMovieUseCase().invoke().isEmpty())
     }
-    @Test
-    fun FilmSearchNameIsEspected()= runTest {
-        val id = 297761.toLong()
-        val stringExpected = "Escuadrón suicida"
-        val movie: Movie? = GetMovieByIDUseCase().invoke(id)
-        assertEquals(movie?.title, stringExpected)
-    }
-
 }
