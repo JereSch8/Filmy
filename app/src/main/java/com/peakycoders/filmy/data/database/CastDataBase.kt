@@ -1,9 +1,10 @@
 package com.peakycoders.filmy.data.database
 
 import com.peakycoders.filmy.entities.models.Cast
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class CastDataBase {
-    companion object{
-        var listPopular = hashMapOf<Long,List<Cast>>()
-    }
+@Singleton
+class CastDataBase @Inject constructor() {
+    var listPopular = hashMapOf<Long,List<Cast>>()
 }

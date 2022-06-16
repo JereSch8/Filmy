@@ -23,7 +23,9 @@ import androidx.compose.ui.unit.dp
 import com.peakycoders.filmy.ui.home.HomeActivity
 import com.peakycoders.filmy.ui.theme.FilmyTheme
 import com.peakycoders.filmy.ui.utils.fullScreen
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SearchActivity : ComponentActivity() {
     private val searchViewModel: SearchViewModel by viewModels()
 

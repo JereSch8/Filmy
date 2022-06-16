@@ -23,9 +23,11 @@ import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import com.peakycoders.filmy.R
 import com.peakycoders.filmy.ui.search.SearchActivity
 import com.peakycoders.filmy.ui.utils.fullScreen
+import dagger.hilt.android.AndroidEntryPoint
 
 const val hmTestTag="hmTestTag"
 
+@AndroidEntryPoint
 class HomeActivity : ComponentActivity() {
     private val homeViewModel: HomeViewModel by viewModels()
 

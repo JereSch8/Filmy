@@ -3,14 +3,16 @@ package com.peakycoders.filmy.data.repository
 import com.peakycoders.filmy.data.database.CastDataBase
 import com.peakycoders.filmy.data.network.CastService
 import com.peakycoders.filmy.entities.models.Cast
+import javax.inject.Inject
 
-class CastRepository {
-    private val api = CastService()
-
+class CastRepository @Inject constructor(
+    private val api : CastService,
+    private val castDatabase : CastDataBase
+){
     suspend fun getCasting(id : Long) : List<Cast> {
-        if (CastDataBase.listPopular[id].isNullOrEmpty() ){
-            CastDataBase.listPopular[id] = api.getCasting( id )
+        if (castDatabase.listPopular[id].isNullOrEmpty() ){
+            castDatabase.listPopular[id] = api.getCasting( id )
         }
-        return CastDataBase.listPopular[id]?.toList() ?: emptyList()
+        return castDatabase.listPopular[id]?.toList() ?: emptyList()
     }
 }

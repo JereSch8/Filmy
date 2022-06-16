@@ -30,8 +30,9 @@ import coil.compose.AsyncImage
 import com.peakycoders.filmy.ui.utils.Utils
 import com.peakycoders.filmy.ui.utils.fullScreen
 import androidx.compose.ui.text.style.TextOverflow
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class DetailsActivity : ComponentActivity() {
     private val detailsViewModel : DetailsViewModel by viewModels()
     private lateinit var movie : Movie
