@@ -7,12 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.peakycoders.filmy.ui.patterns.*
 import com.peakycoders.filmy.usecases.GetSearchMovieUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SearchViewModel : ViewModel() {
-
+@HiltViewModel
+class SearchViewModel @Inject constructor(
+    private val searchMovieUseCase : GetSearchMovieUseCase
+): ViewModel() {
     val resultSearch : MutableState<Response> = mutableStateOf(Response(Error("")))
-    private var searchMovieUseCase = GetSearchMovieUseCase()
 
     fun search(query : String){
         viewModelScope.launch {
@@ -37,5 +40,4 @@ class SearchViewModel : ViewModel() {
     fun updateSearchTextState(newValue: String) {
         _searchTextState.value = newValue
     }
-
 }
