@@ -29,7 +29,7 @@ class SearchViewModel @Inject constructor(
                 )
             else
                 resultSearch.value = Response(
-                    Error("Se produjo un error al obtener las peliculas del momento")
+                    Error("No se encontró la pelicula buscada")
                 )
         }
     }

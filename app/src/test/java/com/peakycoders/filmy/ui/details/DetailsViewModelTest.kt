@@ -1,10 +1,15 @@
 package com.peakycoders.filmy.ui.details
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.peakycoders.filmy.data.database.VisitedDB
 import com.peakycoders.filmy.entities.TransferMovie
-import com.peakycoders.filmy.entities.models.Movie
+import com.peakycoders.filmy.mocks.MockCast
+import com.peakycoders.filmy.mocks.MockMovies
+import com.peakycoders.filmy.ui.patterns.*
+import com.peakycoders.filmy.usecases.GetCastingUseCase
+import com.peakycoders.filmy.usecases.GetVisitedMovieUseCase
+import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.resetMain
@@ -14,78 +19,88 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import kotlin.text.Typography.quote
 
 @ExperimentalCoroutinesApi
 class DetailsViewModelTest{
+    @RelaxedMockK
+    private lateinit var getCastingUseCase : GetCastingUseCase
+    @RelaxedMockK
+    private lateinit var getVisitedMovieUseCase : GetVisitedMovieUseCase
 
     private lateinit var detailsViewModel: DetailsViewModel
-
-    private val movie = Movie(
-        backdrop_path = "",
-        id = 1,
-        original_language = "ES" ,
-        overview = "Es una fake movie",
-        popularity = 100.toDouble(),
-        poster_path = "",
-        release_date = "2022-06-12",
-        runtime = 1,
-        status = "OK",
-        tagline = "",
-        title = "The Best APP",
-        vote_average = 10.toDouble(),
-        vote_count = 100000
-    )
 
     @get:Rule
     var rule: InstantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Before
     fun onBefore(){
-        detailsViewModel = DetailsViewModel()
+        MockKAnnotations.init(this)
         Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     @After
-    fun onAfter() {
-        Dispatchers.resetMain()
-    }
+    fun onAfter() = Dispatchers.resetMain()
 
     @Test
     fun `when viewmodel is created at the first time, get movie details and check title value`() = runTest{
         //Given
-//        TransferMovie.movie = movie
-//        coEvery { detailsViewModel.use } returns quote
-//        //When
-//        detailsViewModel.onCreate()
-//        //Then
-//        assert(quoteViewModel.quoteModel.value == quote.first())
-        assert(true)
+        TransferMovie.movie = MockMovies.movie0
+        //When
+        detailsViewModel = DetailsViewModel(getCastingUseCase, getVisitedMovieUseCase)
+        //Then
+        assert(detailsViewModel.movie?.title == MockMovies.movie0.title)
     }
 
     @Test
     fun `when viewmodel is created at the first time, check the visited movies`() = runTest{
         //Given
+        TransferMovie.movie = MockMovies.movie0
+        coEvery { getVisitedMovieUseCase() } returns listOf(MockMovies.movie0)
         //When
+        detailsViewModel = DetailsViewModel(getCastingUseCase, getVisitedMovieUseCase)
         //Then
-        assert(true)
+        assert(getVisitedMovieUseCase().contains(MockMovies.movie0))
     }
 
     @Test
     fun `check Success Response`(){
-        assert(true)
+        //Given
+        TransferMovie.movie = MockMovies.movie0
+        coEvery { getCastingUseCase(1) } returns MockCast.listCast
+        //When
+        detailsViewModel = DetailsViewModel(getCastingUseCase, getVisitedMovieUseCase)
+        //Then
+        assert(
+            detailsViewModel.response.value.toString()  == Response(
+                Success( SuccessCast(MockCast.listCast) )
+            ).toString()
+        )
     }
 
     @Test
     fun `check Loading Response`(){
-        assert(true)
+        //Given
+        detailsViewModel = DetailsViewModel(getCastingUseCase, getVisitedMovieUseCase)
+        //When
+        detailsViewModel.response.value = Response(Loading())
+        //Then
+        assert(
+            detailsViewModel.response.value.toString() == Response(Loading()).toString()
+        )
     }
 
     @Test
     fun `check Error Response`(){
-        assert(true)
+        //Given
+        TransferMovie.movie = MockMovies.movie0
+        coEvery { getCastingUseCase(1) } returns emptyList()
+        //When
+        detailsViewModel = DetailsViewModel(getCastingUseCase, getVisitedMovieUseCase)
+        //Then
+        assert(
+            detailsViewModel.response.value.toString()  == Response(
+                Error("Se produjo un error al obtener los actores")
+            ).toString()
+        )
     }
-
-
-
 }
