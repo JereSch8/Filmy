@@ -19,11 +19,9 @@ class DetailsViewModel @Inject constructor(
     getVisitedMovieUseCase : GetVisitedMovieUseCase
 ): ViewModel() {
     val movie : Movie? = TransferMovie.movie
-    val response : MutableState<Response> = mutableStateOf(Response(Loading()))
+    val response : MutableState<Response> = mutableStateOf(Response(Loading(LoadingHorizontal())))
 
     init {
-        response.value = Response(Loading())
-
         if (movie != null){
             getVisitedMovieUseCase.save(movie)
             viewModelScope.launch {

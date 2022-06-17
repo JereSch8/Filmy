@@ -82,10 +82,10 @@ class DetailsViewModelTest{
         //Given
         detailsViewModel = DetailsViewModel(getCastingUseCase, getVisitedMovieUseCase)
         //When
-        detailsViewModel.response.value = Response(Loading())
+        detailsViewModel.response.value = Response(Loading(LoadingHorizontal()))
         //Then
         assert(
-            detailsViewModel.response.value.toString() == Response(Loading()).toString()
+            detailsViewModel.response.value.toString() == Response(Loading(LoadingHorizontal())).toString()
         )
     }
 

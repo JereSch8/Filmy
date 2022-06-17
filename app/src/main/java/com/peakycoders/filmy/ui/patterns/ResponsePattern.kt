@@ -3,7 +3,6 @@ package com.peakycoders.filmy.ui.patterns
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -39,25 +38,18 @@ class Error(private val error : String) : Status {
     override fun name() = "error:$error"
 }
 
-class Loading : Status {
+class Loading(private val typeLoading: TypeLoading) : Status {
     @Composable
-    override fun Get()  {
-        return Row(modifier = Modifier
-            .fillMaxWidth()
-            .height(250.dp)){
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(100.dp),
-                    strokeWidth = 6.dp
-                )
-            }
-        }
-    }
+    override fun Get() = typeLoading.Show()
 
-    override fun name() = "loading"
+    override fun name() = "loading:${typeLoading.name()}"
+}
+
+class Empty() : Status {
+    @Composable
+    override fun Get() = Spacer(modifier = Modifier.fillMaxWidth().height(0.dp))
+
+    override fun name() = "empty"
 }
 
 class Response(private var statusResponse: Status) {
