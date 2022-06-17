@@ -21,6 +21,8 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import com.peakycoders.filmy.R
+import com.peakycoders.filmy.ui.patterns.Empty
+import com.peakycoders.filmy.ui.patterns.Response
 import com.peakycoders.filmy.ui.search.SearchActivity
 import com.peakycoders.filmy.ui.utils.fullScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,7 +59,8 @@ class HomeActivity : ComponentActivity() {
                                 homeViewModel.responseNowPlaying.value.Get()
                                 Subtitle(subtitle = "Populares")
                                 homeViewModel.responsePopular.value.Get()
-                                Subtitle(subtitle = "Ultimas visitadas")
+                                if(homeViewModel.visitedMovies.value.toString() != Response(Empty()).toString())
+                                    Subtitle(subtitle = "Ultimas visitadas")
                                 homeViewModel.visitedMovies.value.Get()
                             }
                         }

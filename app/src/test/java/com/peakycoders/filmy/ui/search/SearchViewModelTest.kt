@@ -75,10 +75,10 @@ class SearchViewModelTest {
         //Given
         searchViewModel = SearchViewModel(searchMovieUseCase)
         //When
-        searchViewModel.resultSearch.value = Response( Loading() )
+        searchViewModel.resultSearch.value = Response( Loading(LoadingVertical()) )
         //Then
         assert(
-            searchViewModel.resultSearch.value.toString() == Response(Loading()).toString()
+            searchViewModel.resultSearch.value.toString() == Response(Loading(LoadingVertical())).toString()
         )
     }
 

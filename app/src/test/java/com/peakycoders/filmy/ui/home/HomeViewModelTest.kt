@@ -89,10 +89,10 @@ class HomeViewModelTest {
         //Given
         homeViewModel = HomeViewModel(getPopularMovieUseCase, getPlayinNowMovieUseCase)
         //When
-        homeViewModel.responsePopular.value = Response(Loading())
+        homeViewModel.responsePopular.value = Response(Loading(LoadingVertical()))
         //Then
         assert(
-            homeViewModel.responsePopular.value.toString() == Response(Loading()).toString()
+            homeViewModel.responsePopular.value.toString() == Response(Loading(LoadingVertical())).toString()
         )
     }
 
@@ -129,10 +129,10 @@ class HomeViewModelTest {
         //Given
         homeViewModel = HomeViewModel(getPopularMovieUseCase, getPlayinNowMovieUseCase)
         //When
-        homeViewModel.responseNowPlaying.value = Response(Loading())
+        homeViewModel.responseNowPlaying.value = Response(Loading(LoadingHorizontal()))
         //Then
         assert(
-            homeViewModel.responseNowPlaying.value.toString() == Response(Loading()).toString()
+            homeViewModel.responseNowPlaying.value.toString() == Response(Loading(LoadingHorizontal())).toString()
         )
     }
 

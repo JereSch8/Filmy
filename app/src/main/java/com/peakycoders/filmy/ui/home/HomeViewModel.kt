@@ -19,10 +19,10 @@ class HomeViewModel @Inject constructor(
     private val getPopularMovieUseCase : GetPopularMovieUseCase,
     private val getPlayinNowMovieUseCase : GetNowPlayingMovieUseCase
 ) : ViewModel(), Observer {
-    val visitedMovies : MutableState<Response> = mutableStateOf(Response(Error("")))
+    val visitedMovies : MutableState<Response> = mutableStateOf(Response(Empty()))
 
-    val responsePopular : MutableState<Response> = mutableStateOf(Response(Loading()))
-    val responseNowPlaying : MutableState<Response> = mutableStateOf(Response(Loading()))
+    val responsePopular : MutableState<Response> = mutableStateOf(Response(Loading(LoadingHorizontal())))
+    val responseNowPlaying : MutableState<Response> = mutableStateOf(Response(Loading(LoadingHorizontal())))
 
      init {
          VisitedDB.attach(this)

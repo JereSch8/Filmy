@@ -15,11 +15,11 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val searchMovieUseCase : GetSearchMovieUseCase
 ): ViewModel() {
-    val resultSearch : MutableState<Response> = mutableStateOf(Response(Error("")))
+    val resultSearch : MutableState<Response> = mutableStateOf(Response(Empty()))
 
     fun search(query : String){
         viewModelScope.launch {
-            resultSearch.value = Response(Loading())
+            resultSearch.value = Response(Loading(LoadingVertical()))
             val listMovie = searchMovieUseCase(query)
             if (listMovie.isNotEmpty())
                 resultSearch.value = Response(
