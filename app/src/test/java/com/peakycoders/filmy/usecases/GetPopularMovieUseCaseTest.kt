@@ -1,40 +1,49 @@
 package com.peakycoders.filmy.usecases
 
+import com.peakycoders.filmy.data.repository.MovieRepository
 import com.peakycoders.filmy.entities.models.Movie
-import kotlinx.coroutines.Dispatchers
+import com.peakycoders.filmy.mocks.MockMovies
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+
 @ExperimentalCoroutinesApi
 class GetPopularMovieUseCaseTest{
-    //TODO:Fixear estos test para que funcionen con Dependecy Injection
+    @RelaxedMockK
+    private lateinit var movieRepository: MovieRepository
 
+    lateinit var getPopularMovieUseCase: GetPopularMovieUseCase
     @Before
-    fun setUp() {
-        Dispatchers.setMain(Dispatchers.Unconfined)
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
+    fun onBefore() {
+        MockKAnnotations.init(this)
+        getPopularMovieUseCase = GetPopularMovieUseCase(movieRepository)
     }
 
     @Test
-    fun GetPopularMoviesIsNotEmpty() = runTest{
-        val pag = 1.toLong()
-//        val movie: List<Movie> = GetPopularMovieUseCase().invoke(page= pag)
-//        assertNotEquals(0, movie.size)
+    fun `get popular movies is not empty`() = runTest{
+        //Given
+        coEvery { movieRepository.getPopular(1) } returns MockMovies.listMovie
+        //When
+        val result = getPopularMovieUseCase(1)
+        //Then
+        coVerify(exactly = 1) { movieRepository.getPopular(1) }
+        assertEquals(result, MockMovies.listMovie)
     }
     @Test
-    fun GetPopularMoviesSearchingANullPage() = runTest{
-        val pag = 0.toLong()
-//        val movie: List<Movie> = GetPopularMovieUseCase().invoke(page= pag)
-//        assertEquals(0, movie.size)
+    fun `get popular movies searching a null page`() = runTest{
+        //Given
+        coEvery { movieRepository.getPopular(1) } returns emptyList()
+        //When
+        val result = getPopularMovieUseCase(1)
+        //Then
+        coVerify(exactly = 1) { movieRepository.getPopular(1) }
+        assertEquals(result, emptyList<Movie>())
     }
 
 }

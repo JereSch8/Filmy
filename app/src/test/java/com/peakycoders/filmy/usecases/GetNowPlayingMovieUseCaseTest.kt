@@ -1,33 +1,50 @@
 package com.peakycoders.filmy.usecases
 
+import com.peakycoders.filmy.data.repository.MovieRepository
 import com.peakycoders.filmy.entities.models.Movie
-
-import kotlinx.coroutines.Dispatchers
+import com.peakycoders.filmy.mocks.MockMovies
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert
+
 import org.junit.Before
 import org.junit.Test
+
 @ExperimentalCoroutinesApi
 class GetNowPlayingMovieUseCaseTest(){
-    //TODO:Fixear estos test para que funcionen con Dependecy Injection
+    @RelaxedMockK
+    private lateinit var movieRepository: MovieRepository
 
+    lateinit var getNowPlayingMovieUseCase: GetNowPlayingMovieUseCase
     @Before
-    fun setUp() {
-        Dispatchers.setMain(Dispatchers.Unconfined)
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
+    fun onBefore() {
+        MockKAnnotations.init(this)
+        getNowPlayingMovieUseCase = GetNowPlayingMovieUseCase(movieRepository)
     }
 
     @Test
-    fun GetNowPlayingMoviesIsNotEmpty() = runTest{
-//        val movie: List<Movie> = GetNowPlayingMovieUseCase().invoke()
-//        assertNotEquals(0, movie.size)
+    fun `get now playing movies is not empty`() = runTest{
+        //Given
+        coEvery { movieRepository.getNowPlaying() } returns MockMovies.listMovie
+        //When
+        val result = getNowPlayingMovieUseCase()
+        //Then
+        coVerify(exactly = 1) { movieRepository.getNowPlaying() }
+        Assert.assertEquals(result, MockMovies.listMovie)
+    }
+
+    @Test
+    fun `get now playing movies is empty`() = runTest{
+        //Given
+        coEvery { movieRepository.getNowPlaying() } returns emptyList()
+        //When
+        val result = getNowPlayingMovieUseCase()
+        //Then
+        coVerify(exactly = 1) { movieRepository.getNowPlaying() }
+        Assert.assertEquals(result, emptyList<Movie>())
     }
 }
