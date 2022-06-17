@@ -1,55 +1,60 @@
 package com.peakycoders.filmy.usecases
 
-import com.peakycoders.filmy.entities.models.Movie
-import kotlinx.coroutines.Dispatchers
+import com.peakycoders.filmy.data.repository.MovieRepository
+import com.peakycoders.filmy.mocks.MockMovies
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.Assert.*
 
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 @ExperimentalCoroutinesApi
 class GetMovieByIDUseCaseTest {
-//TODO:Fixear estos test para que funcionen con Dependecy Injection
-    @Before
-    fun setUp() {
-        Dispatchers.setMain(Dispatchers.Unconfined)
-    }
+    @RelaxedMockK
+    private lateinit var movieRepository: MovieRepository
 
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
+    lateinit var getMovieByIDUseCase: GetMovieByIDUseCase
+    @Before
+    fun onBefore() {
+        MockKAnnotations.init(this)
+        getMovieByIDUseCase = GetMovieByIDUseCase(movieRepository)
     }
 
     @Test
-    fun CorrectSearchById()= runTest {
-        val id = 297761.toLong()
-//
-//        val movie: Movie? = GetMovieByIDUseCase().invoke(id)
-//
-//        assertEquals(true, movie != null)
-//
-//        if (movie != null) {
-//            assertEquals(id, movie.id)
-//        }
+    fun `correct search by id`()= runTest {
+        //Given
+        coEvery { movieRepository.getByID(1) } returns MockMovies.movie0
+        //When
+        val result = getMovieByIDUseCase(1)
+        //Then
+        coVerify(exactly = 1) { movieRepository.getByID(1) }
+        assert(1.toLong() == result?.id )
     }
+
     @Test
     fun `invalid id search`()= runTest {
-        val id = -1.toLong()
-
-//        val movie: Movie? = GetMovieByIDUseCase().invoke(id)
-
-//        assertEquals(true, movie == null)
+        //Given
+        coEvery { movieRepository.getByID(-1) } returns null
+        //When
+        val result = getMovieByIDUseCase(-1)
+        //Then
+        coVerify(exactly = 1) { movieRepository.getByID(-1) }
+        assertNull(result)
     }
+
     @Test
     fun `film search name is espected`()= runTest {
-        val id = 297761.toLong()
-        val stringExpected = "Escuadrón suicida"
-//        val movie: Movie? = GetMovieByIDUseCase().invoke(id)
-//        assertEquals(movie?.title, stringExpected)
+        //Given
+        coEvery { movieRepository.getByID(457) } returns MockMovies.movie2
+        //When
+        val result = getMovieByIDUseCase(457)
+        //Then
+        coVerify(exactly = 1) { movieRepository.getByID(457) }
+        assertEquals(MockMovies.movie2.title, result?.title)
     }
 
 }

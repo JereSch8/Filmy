@@ -1,11 +1,13 @@
 package com.peakycoders.filmy.usecases
 
-import com.peakycoders.filmy.entities.models.Movie
-import kotlinx.coroutines.Dispatchers
+import com.peakycoders.filmy.data.repository.MovieRepository
+import com.peakycoders.filmy.mocks.MockMovies
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.Assert.*
 
 import org.junit.After
@@ -13,27 +15,37 @@ import org.junit.Before
 import org.junit.Test
 @ExperimentalCoroutinesApi
 class GetMovieByTitleUseCaseTest {
-//TODO:Fixear estos test para que funcionen con Dependecy Injection
+    @RelaxedMockK
+    private lateinit var movieRepository: MovieRepository
 
+    lateinit var getMovieByTitleUseCase: GetMovieByTitleUseCase
     @Before
-    fun setUp() {
-        Dispatchers.setMain(Dispatchers.Unconfined)
-    }
-
-    @After
-    fun tearDown() {Dispatchers.resetMain()
+    fun onBefore() {
+        MockKAnnotations.init(this)
+        getMovieByTitleUseCase = GetMovieByTitleUseCase(movieRepository)
     }
 
     @Test
-    fun GetCorrectMovieByTitle() = runTest{
-        val title = "Escuadrón suicida"
-//        val movie: List<Movie> = GetMovieByTitleUseCase().invoke(title)
-//        assertEquals(movie.first().title, title)
+    fun `get correct movie by title`() = runTest{
+        //Given
+        coEvery { movieRepository.getByTitle(MockMovies.movie0.title) } returns MockMovies.listMovie
+        //When
+        val result = getMovieByTitleUseCase(MockMovies.movie0.title)
+        //Then
+        coVerify(exactly = 1) { movieRepository.getByTitle(MockMovies.movie0.title) }
+        result.forEach { movie ->
+            assertEquals(movie.title, MockMovies.movie0.title )
+        }
     }
+
     @Test
-    fun GetAIncorrectMovieByTitle() = runTest{
-        val title = "Escuadrón suicida"
-//        val movie: List<Movie> = GetMovieByTitleUseCase().invoke(title)
-//        assertNotEquals(movie.first().title, "")
+    fun `get aIncorrect movie by title`() = runTest{
+        //Given
+        coEvery { movieRepository.getByTitle(MockMovies.movie0.title) } returns emptyList()
+        //When
+        val result = getMovieByTitleUseCase(MockMovies.movie0.title)
+        //Then
+        coVerify(exactly = 1) { movieRepository.getByTitle(MockMovies.movie0.title) }
+        assert(result.isEmpty())
     }
 }
