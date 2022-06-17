@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -34,6 +33,8 @@ import com.peakycoders.filmy.ui.utils.Utils
 interface TypeSuccess {
     @Composable
     fun Show()
+
+    fun name() : String
 }
 
 class SuccessCast(private val casting: List<Cast>) : TypeSuccess {
@@ -89,6 +90,8 @@ class SuccessCast(private val casting: List<Cast>) : TypeSuccess {
             }
         }
     }
+
+    override fun name() = "SuccessCast"
 }
 
 class SuccessMovie(private val movieList: List<Movie>) : TypeSuccess {
@@ -133,10 +136,9 @@ class SuccessMovie(private val movieList: List<Movie>) : TypeSuccess {
             }
         }
     }
+
+    override fun name() = "SuccessMovie"
 }
-
-const val filmTestTag = "filmTestTag"
-
 
 class SuccessSearchMovie(private val movieList: List<Movie>) : TypeSuccess {
     @Composable
@@ -150,10 +152,6 @@ class SuccessSearchMovie(private val movieList: List<Movie>) : TypeSuccess {
                         .fillMaxWidth()
                         .padding(5.dp)
                         .background(color = Color.Transparent)
-
-                        .testTag(filmTestTag)
-
-
                         .clickable {
                             TransferMovie.movie = movie
                             context.startActivity(Intent(context, DetailsActivity::class.java))
@@ -192,4 +190,6 @@ class SuccessSearchMovie(private val movieList: List<Movie>) : TypeSuccess {
             }
         }
     }
+
+    override fun name() = "SuccessSearchMovie"
 }

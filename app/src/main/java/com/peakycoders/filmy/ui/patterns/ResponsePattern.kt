@@ -14,6 +14,8 @@ import androidx.compose.ui.unit.dp
 interface Status {
     @Composable
     fun Get()
+
+    fun name() : String
 }
 
 class Success(private val success: TypeSuccess) : Status {
@@ -21,6 +23,8 @@ class Success(private val success: TypeSuccess) : Status {
     override fun Get()  {
         success.Show()
     }
+
+    override fun name() = "success:${success.name()}"
 }
 
 class Error(private val error : String) : Status {
@@ -31,12 +35,16 @@ class Error(private val error : String) : Status {
             style = TextStyle(fontWeight = FontWeight.ExtraBold),
             modifier = Modifier.padding(40.dp))
     }
+
+    override fun name() = "error:$error"
 }
 
 class Loading : Status {
     @Composable
     override fun Get()  {
-        return Row(modifier = Modifier.fillMaxWidth().height(250.dp)){
+        return Row(modifier = Modifier
+            .fillMaxWidth()
+            .height(250.dp)){
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()
@@ -48,9 +56,13 @@ class Loading : Status {
             }
         }
     }
+
+    override fun name() = "loading"
 }
 
 class Response(private var statusResponse: Status) {
     @Composable
     fun Get() = statusResponse.Get()
+
+    override fun toString() : String = statusResponse.name()
 }
