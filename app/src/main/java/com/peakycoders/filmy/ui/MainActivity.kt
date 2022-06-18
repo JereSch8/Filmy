@@ -1,4 +1,4 @@
-package com.peakycoders.filmy
+package com.peakycoders.filmy.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.peakycoders.filmy.R
 import com.peakycoders.filmy.ui.home.HomeActivity
 import com.peakycoders.filmy.ui.theme.FilmyTheme
 import com.peakycoders.filmy.ui.utils.fullScreen
@@ -59,10 +60,7 @@ class MainActivity : ComponentActivity() {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
-
         Splash(alpha = alphaAnim.value)
-
-
     }
 
     @Composable
@@ -75,9 +73,8 @@ class MainActivity : ComponentActivity() {
             Image(modifier = Modifier.size(150.dp).alpha(alpha = alpha).align(Alignment.Center).background(
                 Color.Black),
                 painter = painterResource(id = R.mipmap.ic_launcher_round),
-                contentDescription = "FILMY ICON")//, tint = androidx.compose.ui.graphics.Color.White)
+                contentDescription = "FILMY ICON")
         }
     }
-
 }
 

@@ -7,16 +7,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.peakycoders.filmy.ui.patterns.*
 import com.peakycoders.filmy.usecases.GetSearchMovieUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SearchViewModel : ViewModel() {
-
-    val resultSearch : MutableState<Response> = mutableStateOf(Response(Error("")))
-    private var searchMovieUseCase = GetSearchMovieUseCase()
+@HiltViewModel
+class SearchViewModel @Inject constructor(
+    private val searchMovieUseCase : GetSearchMovieUseCase
+): ViewModel() {
+    val resultSearch : MutableState<Response> = mutableStateOf(Response(Empty()))
 
     fun search(query : String){
         viewModelScope.launch {
-            resultSearch.value = Response(Loading())
+            resultSearch.value = Response(Loading(LoadingVertical()))
             val listMovie = searchMovieUseCase(query)
             if (listMovie.isNotEmpty())
                 resultSearch.value = Response(
@@ -26,7 +29,7 @@ class SearchViewModel : ViewModel() {
                 )
             else
                 resultSearch.value = Response(
-                    Error("Se produjo un error al obtener las peliculas del momento")
+                    Error("No se encontró la pelicula buscada")
                 )
         }
     }
@@ -37,5 +40,4 @@ class SearchViewModel : ViewModel() {
     fun updateSearchTextState(newValue: String) {
         _searchTextState.value = newValue
     }
-
 }

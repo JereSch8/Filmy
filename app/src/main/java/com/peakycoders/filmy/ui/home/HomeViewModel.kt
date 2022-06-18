@@ -10,16 +10,19 @@ import com.peakycoders.filmy.entities.patterns.Observer
 import com.peakycoders.filmy.ui.patterns.*
 import com.peakycoders.filmy.usecases.GetNowPlayingMovieUseCase
 import com.peakycoders.filmy.usecases.GetPopularMovieUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel(), Observer {
-    val visitedMovies : MutableState<Response> = mutableStateOf(Response(Error("")))
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val getPopularMovieUseCase : GetPopularMovieUseCase,
+    private val getPlayinNowMovieUseCase : GetNowPlayingMovieUseCase
+) : ViewModel(), Observer {
+    val visitedMovies : MutableState<Response> = mutableStateOf(Response(Empty()))
 
-    val responsePopular : MutableState<Response> = mutableStateOf(Response(Loading()))
-    val responseNowPlaying : MutableState<Response> = mutableStateOf(Response(Loading()))
-
-    private var getPopularMovieUseCase = GetPopularMovieUseCase()
-    private var getPlayinNowMovieUseCase = GetNowPlayingMovieUseCase()
+    val responsePopular : MutableState<Response> = mutableStateOf(Response(Loading(LoadingHorizontal())))
+    val responseNowPlaying : MutableState<Response> = mutableStateOf(Response(Loading(LoadingHorizontal())))
 
      init {
          VisitedDB.attach(this)

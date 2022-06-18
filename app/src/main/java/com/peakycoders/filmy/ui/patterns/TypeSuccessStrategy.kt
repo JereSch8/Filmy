@@ -33,6 +33,8 @@ import com.peakycoders.filmy.ui.utils.Utils
 interface TypeSuccess {
     @Composable
     fun Show()
+
+    fun name() : String
 }
 
 class SuccessCast(private val casting: List<Cast>) : TypeSuccess {
@@ -88,6 +90,8 @@ class SuccessCast(private val casting: List<Cast>) : TypeSuccess {
             }
         }
     }
+
+    override fun name() = "SuccessCast"
 }
 
 class SuccessMovie(private val movieList: List<Movie>) : TypeSuccess {
@@ -132,6 +136,8 @@ class SuccessMovie(private val movieList: List<Movie>) : TypeSuccess {
             }
         }
     }
+
+    override fun name() = "SuccessMovie"
 }
 
 class SuccessSearchMovie(private val movieList: List<Movie>) : TypeSuccess {
@@ -184,4 +190,6 @@ class SuccessSearchMovie(private val movieList: List<Movie>) : TypeSuccess {
             }
         }
     }
+
+    override fun name() = "SuccessSearchMovie"
 }

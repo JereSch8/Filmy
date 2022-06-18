@@ -9,18 +9,21 @@ import com.peakycoders.filmy.entities.models.Movie
 import com.peakycoders.filmy.ui.patterns.*
 import com.peakycoders.filmy.usecases.GetCastingUseCase
 import com.peakycoders.filmy.usecases.GetVisitedMovieUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DetailsViewModel : ViewModel() {
+@HiltViewModel
+class DetailsViewModel @Inject constructor(
+    private val getCastingUseCase : GetCastingUseCase,
+    getVisitedMovieUseCase : GetVisitedMovieUseCase
+): ViewModel() {
     val movie : Movie? = TransferMovie.movie
-    val response : MutableState<Response> = mutableStateOf(Response(Loading()))
-    private var getCastingUseCase = GetCastingUseCase()
+    val response : MutableState<Response> = mutableStateOf(Response(Loading(LoadingHorizontal())))
 
     init {
-        response.value = Response(Loading())
-
         if (movie != null){
-            GetVisitedMovieUseCase().save(movie)
+            getVisitedMovieUseCase.save(movie)
             viewModelScope.launch {
                 val casting = getCastingUseCase(movie.id)
                 if(casting.isNotEmpty())
