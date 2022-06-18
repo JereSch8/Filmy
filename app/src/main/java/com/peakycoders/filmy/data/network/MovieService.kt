@@ -50,4 +50,12 @@ class MovieService @Inject constructor(
             response.body()?.results ?: emptyList()
         }
     }
+
+    suspend fun searchMovie(query : String) : List<Movie>{
+        return withContext(Dispatchers.IO){
+            val response = retrofit.create(MovieApiClient::class.java).searchMovie(query)
+
+            response.body()?.results ?: emptyList()
+        }
+    }
 }

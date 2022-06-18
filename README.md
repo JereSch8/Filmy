@@ -3,7 +3,7 @@
 FILMY es una aplicación destinada a dispositivos móviles Android, donde el usuario puede observar todas las películas lanzadas hasta el momento siendo clasificadas por rating y teniendo la opción de acceder a cada título y conocer toda su información, desde actores, duración hasta una breve sinopsis de la película.
 
 
-# Android - Compose - Clean architecture - MMVM - Kotlin - Coroutines - GitFlow
+# Android - Compose - Clean architecture - MVVM - Kotlin - Coroutines - GitFlow
 
 ### **Libraries** 
 
