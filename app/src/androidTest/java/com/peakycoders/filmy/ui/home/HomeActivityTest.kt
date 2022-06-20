@@ -44,6 +44,5 @@ class HomeActivityTest{
 
 
 
-    private fun findRecientToBottom() =
-       composeTestRule.onNodeWithText("Ultimas visitadas")
+    private fun findRecientToBottom() = composeTestRule.onNodeWithText("Populares")
 }
